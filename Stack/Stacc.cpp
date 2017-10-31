@@ -1,54 +1,12 @@
 #include "Stacc.h"
 
-void Stacc::Push( int val )
-{
-	*this = *this( val );
-}
-
-int Stacc::Pop()
-{
-	const int val = values[size - 1];
-	*this = *this( *this );
-	return val;
-}
-
-int Stacc::Count() const
-{
-	return size;
-}
-
-bool Stacc::Empty() const
-{
-	return ( size == 0 );
-}
-
-Stacc::Stacc()
+Stacc::Value::Value( int val_in )
 	:
-	size( 0 )
+	val( val_in )
 {
 }
 
-Stacc::Stacc( const Stacc& source )
+void Stacc::Value::NextVal( int* nextVal_in )
 {
-	size = source.size - 1;
-	values = source.values;
-}
-
-Stacc::Stacc( const Stacc& source,int val )
-{
-	size = source.size + 1;
-	values = new int[size];
-	values[size] = val;
-}
-
-Stacc& Stacc::operator=( const Stacc& source )
-{
-
-	return *this;
-}
-
-Stacc::~Stacc()
-{
-	delete[] values;
-	values = nullptr;
+	nextVal = nextVal_in;
 }
