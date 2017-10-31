@@ -58,11 +58,16 @@ public:
 	}
 	Stacc& operator=( const Stacc& src )
 	{
+		if( !Empty() )
+		{
+			delete pTop;
+			pTop = nullptr;
+		}
+
 		if( !src.Empty() )
 		{
 			pTop = new Element( *src.pTop );
 		}
-
 		return *this;
 	}
 	~Stacc()
