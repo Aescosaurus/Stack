@@ -2,26 +2,108 @@
 
 class Stacc
 {
-public:
-	class Value
+private:
+	class Element
 	{
 	public:
-		Value( int val );
-		void NextVal( int* nextVal );
+		Element( int value,Element* pNext )
+			:
+			val( val ),
+			pNext( pNext )
+		{}
+		Element( const Element& src )
+			:
+			val( src.val )
+		{
+			if( src.pNext != nullptr )
+			{
+				pNext = new Element( *src.pNext );
+			}
+		}
+		int Val() const
+		{
+			return val;
+		}
+		Element* Disconnect()
+		{
+			auto pTemp = pNext;
+			pNext = nullptr;
+			return pTemp;
+		}
+		int CountElements() const
+		{
+			if( pNext != nullptr )
+			{
+				return pNext->CountElements() + 1;
+			}
+			else
+			{
+				return 1;
+			}
+		}
+		~Element()
+		{
+			delete pNext;
+			pNext = nullptr;
+		}
 	private:
-		int* nextVal = nullptr;
-		const int val;
+		int val;
+		Element* pNext = nullptr;
 	};
 public:
-	void Push( int val );
-	int Pop();
-	int Count() const;
-	bool Empty() const;
-public:
-	Stacc();
-	~Stacc();
-	Stacc& operator=( const Stacc& source );
+	Stacc() = default;
+	Stacc( const Stacc& src )
+	{
+		*this = src;
+	}
+	Stacc& operator=( const Stacc& src )
+	{
+		if( !src.Empty() )
+		{
+			pTop = new Element( *src.pTop );
+		}
+
+		return *this;
+	}
+	~Stacc()
+	{
+		delete pTop;
+		pTop = nullptr;
+	}
+	void Push( int val )
+	{
+		pTop = new Element( val,pTop );
+	}
+	int Pop()
+	{
+		if( !Empty() )
+		{
+			const int tempVal = pTop->Val();
+			auto pOldTop = pTop;
+			pTop = pTop->Disconnect();
+			delete pOldTop;
+			return tempVal;
+		}
+		else
+		{
+			return -1;
+		}
+	}
+	int Size() const
+	{
+		if( !Empty() )
+		{
+			return pTop->CountElements();
+		}
+		else
+		{
+			return 0;
+		}
+	}
+	bool Empty() const
+	{
+		return pTop == nullptr;
+	}
 private:
-	int* start = nullptr;
-	int count = 0;
+	Element* pTop = nullptr;
 };
