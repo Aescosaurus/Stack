@@ -10,10 +10,10 @@ public:
 public:
 	Stacc();
 	Stacc( const Stacc& source );
+	Stacc( const Stacc& source,int val );
 	Stacc& operator=( const Stacc& source );
 	~Stacc();
 public:
 	int* values = nullptr;
-	int* temp = nullptr;
 	int size;
 };

@@ -2,32 +2,13 @@
 
 void Stacc::Push( int val )
 {
-	temp = new int[size];
-	for( int i = 0; i < size; ++i )
-	{
-		temp[i] = values[i];
-	}
-	delete[] values;
-	values = new int[size + 1];
-	++size;
-
-	for( int i = 0; i < size - 1; ++i )
-	{
-		values[i] = temp[i];
-	}
-	values[size - 1] = val;
-	delete[] temp;
-	temp = nullptr;
+	*this = *this( val );
 }
 
 int Stacc::Pop()
 {
 	const int val = values[size - 1];
-
-	delete[] values;
-	values = new int[size - 1];
-	--size;
-
+	*this = *this( *this );
 	return val;
 }
 
@@ -49,18 +30,19 @@ Stacc::Stacc()
 
 Stacc::Stacc( const Stacc& source )
 {
-	*this = source;
+	size = source.size - 1;
+	values = source.values;
+}
+
+Stacc::Stacc( const Stacc& source,int val )
+{
+	size = source.size + 1;
+	values = new int[size];
+	values[size] = val;
 }
 
 Stacc& Stacc::operator=( const Stacc& source )
 {
-	size = source.size + 1;
-	values = new int[size];
-
-	for( int i = 0; i < source.size; ++i )
-	{
-		values[i] = source.values[i];
-	}
 
 	return *this;
 }
